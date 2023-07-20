@@ -1,4 +1,4 @@
-from . import ABC, Enum
+from application import ABC, Enum
 
 
 class Controller(ABC):
@@ -31,11 +31,4 @@ class ViewController(Controller):
 
 
 class DraftsController(Controller):
-    """Реализовать консольное приложение заметки, с функциональностью:
-        - сохранением заметок;
-        - чтением заметок (при чтении списка заметок реализовать фильтрацию по дате);
-        - добавлением заметок;
-        - редактированием заметок;
-        - удалением заметок.
-    """
     pass
