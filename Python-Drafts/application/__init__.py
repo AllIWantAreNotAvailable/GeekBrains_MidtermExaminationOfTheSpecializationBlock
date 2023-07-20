@@ -1,6 +1,7 @@
 # Dependencies
 from abc import ABC, abstractmethod, abstractstaticmethod
 from enum import Enum
+from uuid import uuid4
 
 # System
 import os
