@@ -1,11 +1,11 @@
-from abc import ABC, abstractmethod
+from application import ABC, abstractmethod
 
 
 class View(ABC):
 
     @staticmethod
     @abstractmethod
-    def output(text_out: str):
+    def output(*args, **kwargs):
         pass
 
     @staticmethod
@@ -28,8 +28,8 @@ class MainView(View):
         self.__controller = controller
 
     @staticmethod
-    def output(text_out: str):
-        print(text_out)
+    def output(*args, **kwargs):
+        print(*args, **kwargs)
 
     @staticmethod
     def input(invitation: str):
