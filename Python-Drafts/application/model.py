@@ -49,10 +49,13 @@ class NoteFile(Note):
     def file_name(self, file_name) -> None:
         self.__file_name = file_name
 
-    def __str__(self):
-        return '\n'.join([f'UUID: {self.file_name}',
-                          f'Дата создания (редактирования): {self.timestamp.replace(microsecond=0)}',
-                          super().__str__()])
+    def get_content(self) -> str:
+        return super().body
+
+    def __str__(self) -> str:
+        return '\n'.join([f'Дата создания (редактирования): {self.timestamp.replace(microsecond=0)}',
+                          f'UUID: {self.file_name}',
+                          f'Заголовок: {super().title}'])
 
 
 class UUID:
@@ -113,17 +116,11 @@ class NotesFileDataBase:
         with open(os.path.join(self.path, f'{self.uuid_generator()}.json'), 'w', encoding=ENCODING) as file:
             json.dump(note, file, ensure_ascii=False)
 
-    def read(self, file_id: list[str] | str = '') -> list[NoteFile] | NoteFile:
+    def read(self, file_id: str = '') -> list[NoteFile]:
+        notes = list()
         if file_id:
-            if isinstance(file_id, list):
-                return list()
-            elif isinstance(file_id, str):
-                return NoteFile('', '')
-            else:
-                # todo Подумать над вызовом исключения
-                pass
+            pass
         else:
-            notes = list()
             for file_name in os.listdir(self.path):
                 if self.uuid_generator.file_checker()(self.path, file_name):
 
@@ -132,14 +129,16 @@ class NotesFileDataBase:
 
                     path_to_file = os.path.join(self.path, file_name)
                     ctime = os.path.getctime(path_to_file)
-                    file_name_without_extension = file_name.split('.')[0]
                     timestamp = datetime.fromtimestamp(ctime)
+                    file_name_without_extension = file_name.split('.')[0]
+
                     with open(path_to_file, 'r', encoding=ENCODING) as file:
                         notes.append(NoteFile(file_name_without_extension, timestamp, **json.load(file)))
-            return notes
 
-    def update(self):
+        return notes
+
+    def update(self) -> None:
         pass
 
-    def delete(self, file_name: str | list[str]) -> None:
+    def delete(self, file_name: str) -> None:
         pass

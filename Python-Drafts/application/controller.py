@@ -1,6 +1,4 @@
-from application import MainView
-
-from application.model import NotesFileDataBase
+from application import MainView, NotesFileDataBase
 
 
 class Controller:
@@ -25,14 +23,25 @@ class Controller:
     def database(self, database: NotesFileDataBase):
         self.__database = database
 
+    def get_sorted_notes_list(self, file_id: str = '', sort_func=None, reverse: bool = False):
+        return sorted(self.database.read(file_id),
+                      key=sort_func if sort_func else lambda note: note.timestamp,
+                      reverse=reverse)
+
     def create(self):
         note = dict(title=self.view.input('\nУкажите заголовок заметки:'),
                     body=self.view.input('\nВведите содержание заметки:'))
         self.database.create(note)
 
     def read(self):
-        sorted_notes = sorted(self.database.read(), key=lambda note: note.timestamp)
-        self.view.output(*sorted_notes, sep='\n\n')
+        notes_list = self.get_sorted_notes_list()
+
+        if len(notes_list) == 1:
+            note_file = notes_list[0]
+            self.view.output('\n'.join([str(note_file), note_file.get_content()]))
+            return
+
+        self.view.output(*notes_list, sep='\n\n')
 
     def update(self):
         pass
