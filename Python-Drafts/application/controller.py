@@ -1,6 +1,6 @@
 from application import ABC, abstractmethod
 
-from application import MainView
+from application import MainView, DataBase, NoteFile
 
 
 class Controller(ABC):
@@ -28,17 +28,17 @@ class Controller(ABC):
 
 class MainController(Controller):
 
-    def __init__(self, model, view: MainView):
-        self.model = model
+    def __init__(self, model: DataBase, view: MainView):
+        self.model: DataBase = model
         self.view: MainView = view
-        self.temp: str = ''
+        self.temp: NoteFile | None = None
 
     @property
-    def model(self):
+    def model(self) -> DataBase:
         return self.__model
 
     @model.setter
-    def model(self, model) -> None:
+    def model(self, model: DataBase) -> None:
         self.__model = model
 
     @property
@@ -50,7 +50,7 @@ class MainController(Controller):
         self.__view: MainView = view
 
     @property
-    def temp(self) -> str:
+    def temp(self) -> NoteFile:
         return self.__temp
 
     @temp.setter
@@ -58,36 +58,48 @@ class MainController(Controller):
         self.__temp = temp
 
     def new_note(self) -> None:
-        new_note = dict(title=self.view.input('Заголовок заметки:'),
-                        body=self.view.input('Содержание заметки:'))
+        self.temp = self.model.new_note(**dict(title=self.view.input('Заголовок заметки:'),
+                                               body=self.view.input('Содержание заметки:')))
+        self.view.output(f'Заметка успешно создана!\n\n{str(self.temp)}')
 
     def list_all(self) -> None:
-        notes_list = list()
+        notes_list = self.model.list_all()
         self.view.output(notes_list)
 
     def open(self) -> None:
         note_uuid = self.view.input('Введите uuid заметки:')
+        self.temp = self.model.open(note_uuid)
+        self.view.output(self.temp if self.temp else 'Заметка с таким uuid не найдена')
+
+    def close(self):
+        self.temp = None
 
     def update_note(self) -> None:
 
         def case(user_choice: str) -> bool:
-            match user_choice.upper():
+            match user_choice.upper()[:1]:
                 case 'Y':
                     return True
                 case _:  # 'N' and others
                     return False
 
-        note_uuid = self.view.input('Введите uuid заметки:')
-        note = None  # Имеющаяся заметка
-        choice = self.view.input('Изменить заголовок заметки? [Y/N]')
-        if case(choice):
-            note.title = self.view.input('Заголовок заметки:')
+        if self.temp:
+            choice = self.view.input('Изменить заголовок заметки? [Y - Yes / other - No]')
+            if case(choice):
+                self.temp.title = self.view.input('Заголовок заметки:')
 
-        choice = self.view.input('Изменить содержание заметки? [Y/N]')
-        if case(choice):
-            note.body = self.view.input('Содержание заметки:')
+            choice = self.view.input('Изменить содержание заметки? [Y - Yes / other - No]')
+            if case(choice):
+                self.temp.body = self.view.input('Содержание заметки:')
 
-        # Сохранить заметку
+            self.model.update_note(self.temp)
+            self.close()
+        else:
+            self.view.output('Заметка не загружена в память')
 
     def delete_note(self) -> None:
-        note_uuid = self.view.input('Введите uuid заметки:')
+        if self.temp:
+            self.model.delete(self.temp.uuid)
+            self.close()
+        else:
+            self.view.output('Заметка не загружена в память')

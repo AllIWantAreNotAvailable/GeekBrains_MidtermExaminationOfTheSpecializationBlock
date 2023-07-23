@@ -18,6 +18,7 @@ class MainView(View):
 
     @staticmethod
     def output(*args, **kwargs) -> None:
+        print()
         print(*args, **kwargs)
 
     @staticmethod

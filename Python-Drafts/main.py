@@ -1,10 +1,22 @@
-from application.model import DataBase, new_uuid, datetime, os, PATH_TO_DATABASE, DATABASE_NAME, pandas
+from application.view import MainView
+from application.controller import MainController
+from application.model import DataBase
 
 
 def main():
+    controller = MainController(DataBase(), MainView())
+    controller.list_all()
+    # controller.update_note()
+    # controller.open()
+
+
+def test_fill():
     db = DataBase()
-    db.table.to_csv(os.path.join(PATH_TO_DATABASE, DATABASE_NAME, 'db.csv'), index=False)
+    for i in range(100):
+        db.new_note(**dict(title=f'Title of test note №{i}',
+                           body=f'Content of test note №{i}'))
 
 
 if __name__ == '__main__':
+    # test_fill()
     main()
