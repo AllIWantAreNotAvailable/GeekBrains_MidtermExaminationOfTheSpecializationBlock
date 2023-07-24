@@ -1,5 +1,10 @@
+from application import MainView, MainController, DataBase
+
+
 def main():
-    print('Hello, World!')
+    # Main loop:
+    while MainController(DataBase(), MainView()).main_loop():
+        pass
 
 
 if __name__ == '__main__':
