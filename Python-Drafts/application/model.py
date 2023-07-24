@@ -184,8 +184,8 @@ class DataBase:
 
         return self.open(new_note.uuid)
 
-    def list_all(self) -> str:
-        return self.table.to_string()
+    def list_all(self) -> pandas.DataFrame:
+        return self.table
 
     def open(self, uuid) -> NoteFile | None:
         if len(self.__filter_table_content('uuid', uuid)):
@@ -198,5 +198,8 @@ class DataBase:
         self.__save_json_file(note)
         self.__update_row(note)
 
-    def delete(self, uuid: str):
-        pass
+    def delete(self, uuid: str) -> None:
+        if len(self.__filter_table_content('uuid', uuid)):
+            os.remove(os.path.join(self.path, f'{uuid}.json'))
+            self.table = self.table.loc[self.table['uuid'] != uuid]
+            self.__save_table()
