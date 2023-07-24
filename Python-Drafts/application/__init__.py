@@ -5,7 +5,6 @@ from datetime import datetime
 from enum import Enum
 
 import os
-import sys
 import json
 
 # DEPENDENCIES:

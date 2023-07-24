@@ -3,7 +3,8 @@ from application import MainView, MainController, DataBase
 
 def main():
     # Main loop:
-    while MainController(DataBase(), MainView()).main_loop():
+    controller = MainController(DataBase(), MainView())
+    while controller.main_loop():
         pass
 
 
