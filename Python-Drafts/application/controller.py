@@ -1,6 +1,6 @@
 from application import ABC, abstractmethod
 
-from application import MainView, DataBase, NoteFile, Enum
+from application import Enum
 
 
 class MenuStatus(Enum):
@@ -35,30 +35,30 @@ class Controller(ABC):
 
 class MainController(Controller):
 
-    def __init__(self, model: DataBase, view: MainView):
-        self.model: DataBase = model
-        self.view: MainView = view
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
         self.cur_menu = self.__main_menu
-        self.temp: NoteFile | None = None
+        self.temp = None
 
     @property
-    def model(self) -> DataBase:
+    def model(self):
         return self.__model
 
     @model.setter
-    def model(self, model: DataBase) -> None:
+    def model(self, model) -> None:
         self.__model = model
 
     @property
-    def view(self) -> MainView:
+    def view(self):
         return self.__view
 
     @view.setter
-    def view(self, view: MainView) -> None:
-        self.__view: MainView = view
+    def view(self, view) -> None:
+        self.__view = view
 
     @property
-    def temp(self) -> NoteFile:
+    def temp(self):
         return self.__temp
 
     @temp.setter
