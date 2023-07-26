@@ -16,11 +16,20 @@ public class EntityList<E extends EntityInterface> implements EntityListInterfac
     private List<E> list;
 
     public EntityList(UUID uuid, List<E> list) {
+        this.setUuid(uuid);
         this.setList(list);
     }
 
     public EntityList(UUID uuid) {
         this(uuid, new ArrayList<>());
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public List<E> getList() {

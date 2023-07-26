@@ -1,6 +1,6 @@
 package Application.Interfaces;
 
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 public interface FabricInterface<E extends EntityInterface, L extends EntityListInterface<E>> {
@@ -11,9 +11,9 @@ public interface FabricInterface<E extends EntityInterface, L extends EntityList
 
     E generate();
 
-    L generate(Map<UUID, String> uuidNamePairs);
+    L generate(List<UUID> uuids, String name);
 
-    L generate(String[] names);
+    L generate(int numberOf, String name);
 
     L generate(int numberOf);
 

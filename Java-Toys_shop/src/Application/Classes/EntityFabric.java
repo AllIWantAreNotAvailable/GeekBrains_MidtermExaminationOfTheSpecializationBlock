@@ -2,7 +2,10 @@ package Application.Classes;
 
 import Application.Interfaces.FabricInterface;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 public class EntityFabric implements FabricInterface<Entity, EntityList<Entity>> {
 
@@ -39,32 +42,24 @@ public class EntityFabric implements FabricInterface<Entity, EntityList<Entity>>
     }
 
     @Override
-    public EntityList<Entity> generate(Map<UUID, String> uuidNamePairs) {
-        List<Entity> entityList = new ArrayList<>(uuidNamePairs.size());
-        for (Map.Entry<UUID, String> initValues :
-                uuidNamePairs.entrySet()) {
-            entityList.add(this.generate(initValues.getKey(), initValues.getValue()));
+    public EntityList<Entity> generate(List<UUID> uuids, String name) {
+        List<Entity> entities = new ArrayList<>(uuids.size());
+        for (UUID uuid :
+                uuids) {
+            entities.add(this.generate(uuid, name));
         }
-        return new EntityList<>(getUUID(), entityList);
+        return new EntityList<>(getUUID(), entities);
     }
 
     @Override
-    public EntityList<Entity> generate(String[] names) {
-        Map<UUID, String> uuidNamePairs = new HashMap<>();
-        for (String name :
-                names) {
-            uuidNamePairs.put(getUUID(), name);
-        }
-        return this.generate(uuidNamePairs);
+    public EntityList<Entity> generate(int numberOf, String name) {
+        List<UUID> uuids = new ArrayList<>(numberOf);
+        return this.generate(uuids, name);
     }
 
     @Override
     public EntityList<Entity> generate(int numberOf) {
-        List<Entity> entityList = new ArrayList<>(numberOf);
-        for (int i = 0; i < numberOf; i++) {
-            entityList.add(this.generate());
-        }
-        return new EntityList<>(getUUID(), entityList);
+        return this.generate(numberOf, getDefaultName());
     }
 
 }
