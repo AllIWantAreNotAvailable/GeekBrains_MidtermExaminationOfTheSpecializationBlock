@@ -12,14 +12,15 @@ import java.util.stream.Stream;
 
 public class EntityList<E extends EntityInterface> implements EntityListInterface<E> {
 
-    List<E> list;
+    private UUID uuid;
+    private List<E> list;
 
-    public EntityList(List<E> list) {
+    public EntityList(UUID uuid, List<E> list) {
         this.setList(list);
     }
 
-    public EntityList(int initialCapacity) {
-        this(new ArrayList<>(initialCapacity));
+    public EntityList(UUID uuid) {
+        this(uuid, new ArrayList<>());
     }
 
     public List<E> getList() {

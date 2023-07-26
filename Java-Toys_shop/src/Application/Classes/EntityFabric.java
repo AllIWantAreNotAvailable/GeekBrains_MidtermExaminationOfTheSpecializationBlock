@@ -40,12 +40,12 @@ public class EntityFabric implements FabricInterface<Entity, EntityList<Entity>>
 
     @Override
     public EntityList<Entity> generate(Map<UUID, String> uuidNamePairs) {
-        EntityList<Entity> entityList = new EntityList<>(uuidNamePairs.size());
+        List<Entity> entityList = new ArrayList<>(uuidNamePairs.size());
         for (Map.Entry<UUID, String> initValues :
                 uuidNamePairs.entrySet()) {
             entityList.add(this.generate(initValues.getKey(), initValues.getValue()));
         }
-        return entityList;
+        return new EntityList<>(getUUID(), entityList);
     }
 
     @Override
@@ -60,11 +60,11 @@ public class EntityFabric implements FabricInterface<Entity, EntityList<Entity>>
 
     @Override
     public EntityList<Entity> generate(int numberOf) {
-        EntityList<Entity> entityList = new EntityList<>(numberOf);
+        List<Entity> entityList = new ArrayList<>(numberOf);
         for (int i = 0; i < numberOf; i++) {
             entityList.add(this.generate());
         }
-        return entityList;
+        return new EntityList<>(getUUID(), entityList);
     }
 
 }
