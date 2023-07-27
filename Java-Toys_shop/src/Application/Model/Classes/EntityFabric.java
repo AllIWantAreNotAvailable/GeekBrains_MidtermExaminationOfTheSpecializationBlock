@@ -1,6 +1,6 @@
-package Application.Classes;
+package Application.Model.Classes;
 
-import Application.Interfaces.FabricInterface;
+import Application.Model.Interfaces.FabricInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +54,9 @@ public class EntityFabric implements FabricInterface<Entity, EntityList<Entity>>
     @Override
     public EntityList<Entity> generate(int numberOf, String name) {
         List<UUID> uuids = new ArrayList<>(numberOf);
+        for (int i = 0; i < numberOf; i++) {
+            uuids.add(getUUID());
+        };
         return this.generate(uuids, name);
     }
 

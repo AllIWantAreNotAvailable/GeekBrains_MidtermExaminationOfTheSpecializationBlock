@@ -1,6 +1,6 @@
-package Application.Interfaces;
+package Application.Model.Interfaces;
 
-import Application.Classes.Entity;
+import Application.Model.Classes.Entity;
 
 import java.util.UUID;
 

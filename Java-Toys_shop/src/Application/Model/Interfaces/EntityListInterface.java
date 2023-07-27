@@ -1,6 +1,4 @@
-package Application.Interfaces;
-
-import Application.Classes.Entity;
+package Application.Model.Interfaces;
 
 import java.util.List;
 

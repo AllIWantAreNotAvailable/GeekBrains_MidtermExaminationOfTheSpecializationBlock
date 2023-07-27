@@ -1,4 +1,4 @@
-package Application.Interfaces;
+package Application.Model.Interfaces;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package Application.Classes;
+package Application.Model.Classes;
 
 import java.util.Comparator;
 

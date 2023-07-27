@@ -1,7 +1,7 @@
-package Application.Classes;
+package Application.Model.Classes;
 
-import Application.Interfaces.EntityInterface;
-import Application.Interfaces.EntityListInterface;
+import Application.Model.Interfaces.EntityInterface;
+import Application.Model.Interfaces.EntityListInterface;
 
 import java.util.*;
 import java.util.function.Consumer;
