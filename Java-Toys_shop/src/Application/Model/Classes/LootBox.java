@@ -1,8 +1,10 @@
 package Application.Model.Classes;
 
+import Application.Model.Interfaces.LootBoxInterface;
+
 import java.util.*;
 
-public class LootBox {
+public class LootBox implements LootBoxInterface {
 
     EntityFabric fabric;
     Map<UUID, EntityList<Entity>> loot;
@@ -18,34 +20,42 @@ public class LootBox {
         this.turnOff();
     }
 
+    @Override
     public EntityFabric getFabric() {
         return fabric;
     }
 
+    @Override
     public void setFabric(EntityFabric fabric) {
         this.fabric = fabric;
     }
 
+    @Override
     public Map<UUID, EntityList<Entity>> getLoot() {
         return loot;
     }
 
+    @Override
     public void setLoot(Map<UUID, EntityList<Entity>> loot) {
         this.loot = loot;
     }
 
+    @Override
     public Map<UUID, Integer> getProbabilities() {
         return probabilities;
     }
 
+    @Override
     public void setProbabilities(Map<UUID, Integer> probabilities) {
         this.probabilities = probabilities;
     }
 
+    @Override
     public Map<UUID, List<Boolean>> getLottery() {
         return lottery;
     }
 
+    @Override
     public void setLottery(Map<UUID, List<Boolean>> lottery) {
         this.lottery = lottery;
     }
@@ -64,20 +74,24 @@ public class LootBox {
         return flag;
     }
 
+    @Override
     public void turnOn() throws Exception {
         boolean flag = checkNumberOfPrizes();
         this.working = flag;
         if (!flag) throw new Exception("Нет призов!");
     }
 
+    @Override
     public void turnOff() {
         this.working = false;
     }
 
+    @Override
     public Boolean isWorking() {
         return this.working && checkNumberOfPrizes();
     }
 
+    @Override
     public void addLoot(int numberOf, String name, int lootingProbability) {
 
         EntityList<Entity> newLoot = this.getFabric().generate(numberOf, name);
@@ -99,6 +113,7 @@ public class LootBox {
         this.getLottery().put(newLootUuid, lottery);
     }
 
+    @Override
     public Entity generate() throws Exception {
 
         Entity prize = null;
