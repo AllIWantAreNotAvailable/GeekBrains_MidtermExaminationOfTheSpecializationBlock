@@ -5,7 +5,7 @@ import Model.Interfaces.ToyInterface;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Toy<E extends Toy<?>> extends Entity<E> implements ToyInterface<E> {
+public class Toy extends Entity implements ToyInterface {
 
     private String toyName;
 
@@ -32,7 +32,7 @@ public class Toy<E extends Toy<?>> extends Entity<E> implements ToyInterface<E> 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Toy<?> that)) return false;
+        if (!(obj instanceof Toy that)) return false;
         return Objects.equals(getToyName(), that.getToyName());
     }
 

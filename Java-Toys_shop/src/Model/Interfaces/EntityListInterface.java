@@ -4,7 +4,7 @@ import Model.Classes.Entity;
 
 import java.util.List;
 
-public interface EntityListInterface<E extends Entity<?>> extends ModelInterface<E>, List<E> {
+public interface EntityListInterface<E extends Entity> extends ModelInterface, List<E> {
 
     List<E> getEntityList();
 

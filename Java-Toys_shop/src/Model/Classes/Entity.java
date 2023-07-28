@@ -4,7 +4,7 @@ import Model.Interfaces.EntityInterface;
 
 import java.util.UUID;
 
-public abstract class Entity<E extends Entity<?>> extends Model<E> implements EntityInterface<E> {
+public abstract class Entity implements EntityInterface {
 
     private UUID uuid;
 

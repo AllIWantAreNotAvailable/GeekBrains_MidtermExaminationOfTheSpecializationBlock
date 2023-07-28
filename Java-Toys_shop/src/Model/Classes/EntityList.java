@@ -1,6 +1,5 @@
 package Model.Classes;
 
-
 import Model.Interfaces.EntityListInterface;
 
 import java.util.*;
@@ -10,7 +9,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public abstract class EntityList<E extends Entity<?>> extends Entity<E> implements EntityListInterface<E> {
+public abstract class EntityList<E extends Entity> extends Entity implements EntityListInterface<E> {
 
     private List<E> entityList;
 
