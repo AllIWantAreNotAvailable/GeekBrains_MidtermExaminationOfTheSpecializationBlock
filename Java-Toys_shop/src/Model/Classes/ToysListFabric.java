@@ -3,7 +3,7 @@ package Model.Classes;
 import java.util.List;
 import java.util.UUID;
 
-public class ToysListFabric<E extends Toy> {
+public class ToysListFabric {
 
     private ToyFabric fabric;
 
@@ -19,20 +19,30 @@ public class ToysListFabric<E extends Toy> {
         this.fabric = fabric;
     }
 
-    public ToysList<E> ToysList(UUID uuid, List<E> entityList) {
+    public ToysList<Toy> generate(UUID uuid, List<Toy> toysList) {
+        return new ToysList<>(uuid, toysList);
+    }
+
+    public ToysList<Toy> generate(List<Toy> toysList) {
+        return new ToysList<>(toysList);
+    }
+
+    public ToysList<Toy> generate(UUID uuid) {
+        return new ToysList<>(uuid);
+    }
+
+    public ToysList<Toy> generate() {
         return new ToysList<>();
     }
 
-    public ToysList<E> ToysList(UUID uuid) {
-        return new ToysList<>();
-    }
+    public ToysList<Toy> generate(String toysName, int numberOf) {
+        ToysList<Toy> toys = this.generate();
 
-    public ToysList<E> ToysList(List<E> entityList) {
-        return new ToysList<>();
-    }
+        for (int i = 0; i < numberOf; i++) {
+            toys.add(this.getFabric().generate(toysName));
+        }
 
-    public ToysList<E> ToysList() {
-        return new ToysList<>();
+        return toys;
     }
 
 }
