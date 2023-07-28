@@ -2,7 +2,7 @@ package Model.Classes;
 
 import java.util.UUID;
 
-public class ToyFabric {
+public class ToyFabric extends Model {
 
     public Toy generate(UUID uuid, String toyName) {
         return new Toy(uuid, toyName);

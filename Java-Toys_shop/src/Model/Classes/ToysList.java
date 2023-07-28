@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ToysList<E extends Toy> extends EntityList<E> implements ToysListInterface {
+public class ToysList<E extends Toy> extends EntityList<E> implements ToysListInterface<E> {
 
     public ToysList(UUID uuid, List<E> entityList) {
         super(uuid, entityList);

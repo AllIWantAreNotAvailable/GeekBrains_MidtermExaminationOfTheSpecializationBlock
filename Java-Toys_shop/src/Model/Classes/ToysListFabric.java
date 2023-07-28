@@ -3,7 +3,7 @@ package Model.Classes;
 import java.util.List;
 import java.util.UUID;
 
-public class ToysListFabric {
+public class ToysListFabric extends Model {
 
     private ToyFabric fabric;
 

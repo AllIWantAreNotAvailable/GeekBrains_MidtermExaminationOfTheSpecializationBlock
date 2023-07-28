@@ -1,10 +1,8 @@
 package Model.Interfaces;
 
-import Model.Classes.Entity;
-
 import java.util.UUID;
 
-public interface EntityInterface {
+public interface EntityInterface extends ModelInterface {
 
     UUID getUuid();
 
