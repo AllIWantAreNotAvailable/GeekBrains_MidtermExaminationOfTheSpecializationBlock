@@ -42,13 +42,58 @@ public class LootBox extends Model {
         this.lootingProbability = lootingProbability;
     }
 
+    private void cleanEmpty() {
+        List<UUID> emptyUuids = new ArrayList<>();
+        for (Map.Entry<UUID, ToysList<Toy>> entry :
+                this.getLootMap().entrySet()) {
+            if (entry.getValue().isEmpty()) {
+                emptyUuids.add(entry.getKey());
+            }
+        }
+        for (UUID uuid :
+                emptyUuids) {
+            this.getLootMap().remove(uuid);
+            this.getLootingProbability().remove(uuid);
+        }
+    }
+
+    private boolean isEmpty() {
+        this.cleanEmpty();
+        return this.getLootMap().isEmpty();
+    }
+
     public ToysList<Toy> put(String toysName, int numberOf, int lootingProbability) {
         ToysList<Toy> toysList = this.getFabric().generate(toysName, numberOf);
         this.getLootingProbability().put(toysList.getUuid(), lootingProbability);
         return this.getLootMap().put(toysList.getUuid(), toysList);
     }
 
-    public Toy get() {
+    public Map<UUID, String> showLootingProbabilities() throws Exception {
+
+        if (this.isEmpty()) {
+            throw new Exception("Нет призов для розыгрыша!");
+        }
+
+        Map<UUID, String> map = new HashMap<>();
+        for (Map.Entry<UUID, ToysList<Toy>> entry :
+                this.getLootMap().entrySet()) {
+            Integer probability = this.getLootingProbability().get(entry.getKey());
+            String toyName = this.getLootMap().get(entry.getKey()).get(0).getToyName();
+            map.put(entry.getKey(), String.format("Игрушка '%s' выпадет с вероятностью %d%c", toyName, probability, '%'));
+        }
+        return map;
+    }
+
+    public Integer changeLootingProbability(UUID uuid, int lootingProbability) {
+        return this.getLootingProbability().put(uuid, lootingProbability);
+    }
+
+    public Toy get() throws Exception {
+
+        if (this.isEmpty()) {
+            throw new Exception("Нет призов для розыгрыша!");
+        }
+
         Toy prize = null;
         Random random = new Random();
         List<UUID> uuids = new ArrayList<>(this.getLootMap().keySet());
@@ -77,14 +122,16 @@ public class LootBox extends Model {
             Boolean isPrize = lottery.get(lotteryTicket);
             if (isPrize) {
                 ToysList<Toy> toysList = this.getLootMap().get(curUUID);
-                if (toysList.isEmpty()){
+                if (toysList.isEmpty()) {
                     continue;
                 }
                 prize = toysList.remove(0);
             }
+
         }
 
         return prize;
+
     }
 
 }
