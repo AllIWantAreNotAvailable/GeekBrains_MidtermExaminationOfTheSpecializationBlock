@@ -14,7 +14,7 @@ public abstract class Entity extends Model implements EntityInterface {
 
     public Entity() {
         // todo Add UUID generator
-        this.setUuid(null);
+        this.setUuid(UUID.randomUUID());
     }
 
     @Override

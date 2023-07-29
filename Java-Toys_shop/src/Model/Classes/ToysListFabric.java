@@ -11,6 +11,10 @@ public class ToysListFabric extends Model {
         this.setFabric(fabric);
     }
 
+    public ToysListFabric() {
+        this(new ToyFabric());
+    }
+
     public ToyFabric getFabric() {
         return fabric;
     }

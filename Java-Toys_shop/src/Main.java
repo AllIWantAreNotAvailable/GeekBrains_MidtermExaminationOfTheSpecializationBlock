@@ -1,7 +1,4 @@
-import Model.Classes.Toy;
-import Model.Classes.ToyFabric;
-import Model.Classes.ToysList;
-import Model.Classes.ToysListFabric;
+import Model.Classes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,48 +6,27 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
-         toyTests();
-         toysFabricTests();
-         toyListTests();
-         toyListFabricTests();
+        lootingTests();
     }
 
-    private static void toyTests() {
-        String defaultName = "Default toy #";
+    private static void lootingTests() {
+        LootBox lootBox = new LootBox();
+        lootBox.put("Prize", 1, 20);
+        lootBox.put("Bronze prize", 1, 15);
+        lootBox.put("Silver prize", 1, 10);
+        lootBox.put("Gold prize", 1, 5);
+        lootBox.put("Super prize", 1, 1);
 
+        List<Toy> prizes = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            Toy toy = new Toy(String.format("%s%d", defaultName, i));
-            System.out.println(toy);
+            Toy prize = lootBox.get();
+            if (prize != null) {
+                prizes.add(prize);
+            }
         }
-    }
-
-    private static void toysFabricTests() {
-        String defaultName = "Default toy #";
-        ToyFabric toyFabric = new ToyFabric();
-
-        for (int i = 0; i < 10; i++) {
-            Toy toy = toyFabric.generate(String.format("%s%d", defaultName, i));
-            System.out.println(toy);
-        }
-    }
-
-    private static void toyListTests() {
-        List<Toy> toys = new ArrayList<>();
-        String defaultName = "Default toy #";
-
-        for (int i = 0; i < 10; i++) {
-            Toy toy = new Toy(String.format("%s%d", defaultName, i));
-            toys.add(toy);
+        for (int i = 0; i < prizes.size(); i++) {
+            System.out.printf("%d) %s\n", i + 1, prizes.get(i));
         }
 
-        ToysList<Toy> toysList = new ToysList<>(toys);
-        System.out.println(toysList);
     }
-
-    private static void toyListFabricTests() {
-        ToysListFabric toysListFabric = new ToysListFabric(new ToyFabric());
-        ToysList<Toy> toysList = toysListFabric.generate("Default toy", 10);
-        System.out.println(toysList);
-    }
-
 }
