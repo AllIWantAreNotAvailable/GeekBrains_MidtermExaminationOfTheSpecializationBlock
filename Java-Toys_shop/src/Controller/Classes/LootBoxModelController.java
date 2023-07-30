@@ -71,6 +71,11 @@ public class LootBoxModelController extends ModelController<LootBox> implements 
     }
 
     @Override
+    public ToysList<Toy> remove(UUID uuid) {
+        return this.getModel().remove(uuid);
+    }
+
+    @Override
     public Toy get() {
 
         try {

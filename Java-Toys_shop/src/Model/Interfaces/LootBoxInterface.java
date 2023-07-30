@@ -27,6 +27,8 @@ public interface LootBoxInterface extends ModelInterface {
 
     Integer changeLootingProbability(UUID uuid, int newLootingProbability);
 
+    ToysList<Toy> remove(UUID uuid);
+
     Toy get() throws Exception;
 
 }

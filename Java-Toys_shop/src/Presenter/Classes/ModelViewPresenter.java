@@ -5,6 +5,7 @@ import Controller.Classes.LootBoxViewController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBoxViewController> {
 
@@ -16,20 +17,55 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
         this(new LootBoxModelController(), new LootBoxViewController());
     }
 
-    private int parseUserChoice(String intro) throws NumberFormatException {
-        return Integer.parseInt(this.getViewController().scanInput(intro));
+    private int parseUserChoice(String intro, boolean showInstruction) throws NumberFormatException {
+        return Integer.parseInt(this.getViewController().scanInput(intro, showInstruction));
     }
 
-    private static String getIntro(Map<Integer, String> mainMenu) {
+    private static String getIntro(Map<Integer, String> menu) {
         StringBuilder intro = new StringBuilder();
         for (Map.Entry<Integer, String> entry :
-                mainMenu.entrySet()) {
+                menu.entrySet()) {
             intro.append(String.format("%d) %s\n", entry.getKey(), entry.getValue()));
         }
         return intro.toString();
     }
 
-    private boolean setUp() {
+    private void removePrize() {
+        this.showPrizes();
+        UUID choice = UUID.fromString(this.getViewController().scanInput("Укажите UUID игрушки", false));
+        this.getModelController().remove(choice);
+    }
+
+    private void changePrizeProbability() {
+        this.showPrizes();
+        UUID choice = UUID.fromString(this.getViewController().scanInput("Укажите UUID игрушки", false));
+        int newProbability = this.parseUserChoice("Укажите новую вероятность выпадения", false);
+        this.getModelController().changeLootingProbability(choice, newProbability);
+    }
+
+    private void addPrize() {
+        boolean showInstructions = false;
+        String toysName = this.getViewController().scanInput("Введите название игрушки", showInstructions);
+        int numberOf = this.parseUserChoice("Укажите количество для розыгрыша", showInstructions);
+        String intro = "Введите вероятность выпадения (0 < ... <= 100)";
+        int lootingProbability = this.parseUserChoice(intro, showInstructions);
+        while (lootingProbability < 0 || 100 < lootingProbability) {
+            this.getViewController().showMessage("Вероятность должна находится в диапазоне 0 < ... <= 100");
+            lootingProbability  = this.parseUserChoice(intro, showInstructions);
+        }
+        this.getModelController().put(toysName, numberOf, lootingProbability);
+    }
+
+    private void showPrizes() {
+        StringBuilder text = new StringBuilder();
+        for (Map.Entry<UUID, String> entry :
+                this.getModelController().showLootingProbabilities().entrySet()) {
+            text.append(String.format("UUID: %s -> %s\n", entry.getKey(), entry.getValue()));
+        }
+        this.getViewController().showMessage(text.toString());
+    }
+
+    private void setUp() {
         Map<Integer, String> setUpMenu = new HashMap<>()
         {{
             put(1, "Показать все призы.");
@@ -38,22 +74,12 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
             put(4, "Удалить приз.");
             put(5, "В главное меню.");
             put(6, "Закрыть программу.");
-
         }};
         String intro = getIntro(setUpMenu);
-        return switch (parseUserChoice(intro)) {
-            case 1 -> true;
-            case 2 -> true;
-            case 3 -> true;
-            case 4 -> true;
-            case 5 -> true;
-            case 6 -> false;
-            default -> true;
-        };
 
     }
 
-    private boolean mainMenu() {
+    private void mainMenu() {
         Map<Integer, String> mainMenu = new HashMap<>()
         {{
             put(1, "Настроить розыгрыш.");
@@ -62,12 +88,7 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
 
         }};
         String intro = getIntro(mainMenu);
-        return switch (parseUserChoice(intro)) {
-            case 1 -> true;
-            case 2 -> true;
-            case 3 -> false;
-            default -> true;
-        };
+
     }
 
     @Override
@@ -83,7 +104,7 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
 
         boolean goOn = true;
         while (goOn) {
-            goOn = this.mainMenu();
+            goOn = false;
         }
 
     }

@@ -87,9 +87,12 @@ public class LootBox extends Model implements LootBoxInterface {
         Map<UUID, String> map = new HashMap<>();
         for (Map.Entry<UUID, ToysList<Toy>> entry :
                 this.getLootMap().entrySet()) {
+            String toysName = String.format("Игрушка '%s' ", this.getLootMap().get(entry.getKey()).get(0).getToyName());
+            String toysLeft = String.format("(остаток %d) ", this.getLootMap().get(entry.getKey()).size());
             Integer probability = this.getLootingProbability().get(entry.getKey());
-            String toyName = this.getLootMap().get(entry.getKey()).get(0).getToyName();
-            map.put(entry.getKey(), String.format("Игрушка '%s' выпадет с вероятностью %d%c", toyName, probability, '%'));
+            String toysProbability = String.format("вероятность выпадения %d%c", probability, '%');
+            String information = String.format("%s%s%s", toysName, toysLeft, toysProbability);
+            map.put(entry.getKey(), information);
         }
         return map;
     }
@@ -97,6 +100,12 @@ public class LootBox extends Model implements LootBoxInterface {
     @Override
     public Integer changeLootingProbability(UUID uuid, int newLootingProbability) {
         return this.getLootingProbability().put(uuid, newLootingProbability);
+    }
+
+    @Override
+    public ToysList<Toy> remove(UUID uuid) {
+        this.getLootingProbability().remove(uuid);
+        return this.getLootMap().remove(uuid);
     }
 
     @Override

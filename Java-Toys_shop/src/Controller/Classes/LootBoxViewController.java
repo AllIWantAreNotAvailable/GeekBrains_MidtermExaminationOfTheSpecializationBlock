@@ -31,8 +31,8 @@ public class LootBoxViewController extends ViewController<LootBoxView> implement
     }
 
     @Override
-    public String scanInput(String introduction) {
-        return super.getView().scanInput(introduction);
+    public String scanInput(String introduction, boolean showInstruction) {
+        return super.getView().scanInput(introduction, showInstruction);
     }
 
 }

@@ -10,6 +10,6 @@ public interface LootBoxViewInterface extends ViewInterface {
 
     void showMessage(String message);
 
-    String scanInput(String introduction);
+    String scanInput(String introduction, boolean showInstruction);
 
 }
