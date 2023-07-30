@@ -2,5 +2,5 @@ package Controller.Classes;
 
 import Controller.Interfaces.ControllerInterface;
 
-public abstract class Controller<C extends Controller<?>> implements ControllerInterface<C> {
+public abstract class Controller implements ControllerInterface {
 }

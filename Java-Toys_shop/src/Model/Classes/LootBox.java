@@ -1,8 +1,10 @@
 package Model.Classes;
 
+import Model.Interfaces.LootBoxInterface;
+
 import java.util.*;
 
-public class LootBox extends Model {
+public class LootBox extends Model implements LootBoxInterface {
 
     private ToysListFabric fabric;
     private Map<UUID, ToysList<Toy>> lootMap;
@@ -18,26 +20,32 @@ public class LootBox extends Model {
         this(new ToysListFabric());
     }
 
+    @Override
     public ToysListFabric getFabric() {
         return this.fabric;
     }
 
+    @Override
     public void setFabric(ToysListFabric fabric) {
         this.fabric = fabric;
     }
 
+    @Override
     public Map<UUID, ToysList<Toy>> getLootMap() {
         return this.lootMap;
     }
 
+    @Override
     public void setLootMap(Map<UUID, ToysList<Toy>> lootMap) {
         this.lootMap = lootMap;
     }
 
+    @Override
     public Map<UUID, Integer> getLootingProbability() {
         return lootingProbability;
     }
 
+    @Override
     public void setLootingProbability(Map<UUID, Integer> lootingProbability) {
         this.lootingProbability = lootingProbability;
     }
@@ -62,12 +70,14 @@ public class LootBox extends Model {
         return this.getLootMap().isEmpty();
     }
 
+    @Override
     public ToysList<Toy> put(String toysName, int numberOf, int lootingProbability) {
         ToysList<Toy> toysList = this.getFabric().generate(toysName, numberOf);
         this.getLootingProbability().put(toysList.getUuid(), lootingProbability);
         return this.getLootMap().put(toysList.getUuid(), toysList);
     }
 
+    @Override
     public Map<UUID, String> showLootingProbabilities() throws Exception {
 
         if (this.isEmpty()) {
@@ -84,10 +94,12 @@ public class LootBox extends Model {
         return map;
     }
 
-    public Integer changeLootingProbability(UUID uuid, int lootingProbability) {
-        return this.getLootingProbability().put(uuid, lootingProbability);
+    @Override
+    public Integer changeLootingProbability(UUID uuid, int newLootingProbability) {
+        return this.getLootingProbability().put(uuid, newLootingProbability);
     }
 
+    @Override
     public Toy get() throws Exception {
 
         if (this.isEmpty()) {

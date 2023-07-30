@@ -1,7 +1,24 @@
 package Controller.Classes;
 
+import Controller.Interfaces.ModelControllerInterface;
 import Model.Classes.Model;
-import Model.Interfaces.ModelInterface;
 
-public abstract class ModelController<M extends Model> extends Controller<ModelController<M>> implements ModelInterface {
+public abstract class ModelController<M extends Model> extends Controller implements ModelControllerInterface<M> {
+
+    private M model;
+
+    public ModelController(M model) {
+        this.setModel(model);
+    }
+
+    @Override
+    public M getModel() {
+        return model;
+    }
+
+    @Override
+    public void setModel(M model) {
+        this.model = model;
+    }
+
 }
