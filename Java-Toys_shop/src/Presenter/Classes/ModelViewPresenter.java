@@ -24,12 +24,14 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
 
     private void makeLog(String logMessage) {
         Logger logger = Logger.getAnonymousLogger();
+        logger.setLevel(Level.FINEST);
         FileHandler logHandler = null;
         try {
-            logHandler = new FileHandler("win_logs.log");
+            logHandler = new FileHandler("win_logs.log", true);
+            logHandler.setEncoding("UTF-8");
             logger.addHandler(logHandler);
             String loggerString = String.format("%s\n", logMessage);
-            logger.log(Level.INFO, loggerString);
+            logger.log(Level.FINEST, loggerString);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -44,10 +46,8 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
         try {
             choice = Integer.parseInt(this.getViewController().scanInput(intro, showInstruction));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             this.getViewController().showMessage("Не удалось определить выбор. Ошибка ввода, повторите ввод.\n");
         } catch (Exception e) {
-            e.printStackTrace();
             this.getViewController().showMessage("Непредвиденная ошибка, повторите ввод.\n");
         }
         return choice;
@@ -65,27 +65,40 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
     private void removePrize() {
         this.showPrizes();
         if (!this.getModelController().isEmpty()) {
-            UUID choice = UUID.fromString(this.getViewController().scanInput("Укажите UUID игрушки", false));
-            this.getModelController().remove(choice);
+            String input = "";
+            try {
+                input = this.getViewController().scanInput("Укажите UUID игрушки", false);
+                UUID choice = UUID.fromString(input);
+                this.getModelController().remove(choice);
+            } catch (Exception e) {
+                this.getViewController().showMessage(String.format("Не удалось удалить игрушку с UUID: %s\n", input));
+            }
         }
     }
 
     private void changePrizeProbability() {
         this.showPrizes();
         if (!this.getModelController().isEmpty()) {
-            UUID choice = UUID.fromString(this.getViewController().scanInput("Укажите UUID игрушки", false));
-            int newProbability = this.parseUserChoice("Укажите новую вероятность выпадения", false);
-            this.getModelController().changeLootingProbability(choice, newProbability);
+            String input = "";
+            try {
+                input = this.getViewController().scanInput("Укажите UUID игрушки", false);
+                UUID choice = UUID.fromString(input);
+                int newProbability = this.parseUserChoice("Укажите новую вероятность выпадения", false);
+                this.getModelController().changeLootingProbability(choice, newProbability);
+            } catch (Exception e) {
+                String message = String.format("Не удалось изменить вероятность выпадения игрушки с UUID: %s\n", input);
+                this.getViewController().showMessage(message);
+            }
         }
     }
 
     private void addPrize() {
         boolean showInstructions = false;
         String toysName = this.getViewController().scanInput("Введите название игрушки:", showInstructions);
-        int numberOf = this.parseUserChoice("Укажите количество для розыгрыша", showInstructions);
-        String intro = "Введите вероятность выпадения (0 < ... <= 100)";
+        int numberOf = this.parseUserChoice("Укажите количество для розыгрыша:", showInstructions);
+        String intro = "Введите вероятность выпадения (0 < ... <= 100):";
         int lootingProbability = this.parseUserChoice(intro, showInstructions);
-        while (lootingProbability < 0 || 100 < lootingProbability) {
+        while (lootingProbability <= 0 || 100 < lootingProbability) {
             this.getViewController().showMessage("Вероятность должна находится в диапазоне 0 < ... <= 100\n");
             lootingProbability  = this.parseUserChoice(intro, showInstructions);
         }
@@ -116,6 +129,7 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
             put(6, "Закрыть программу.");
         }};
         String intro = getIntro(setUpMenu);
+        intro = String.format("Настройки:\n%s", intro);
         boolean response = true;
         boolean goOn = true;
         while (goOn) {
@@ -160,6 +174,7 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
 
         }};
         String intro = getIntro(mainMenu);
+        intro = String.format("Розыгрыш призов:\n%s", intro);
         boolean response = true;
         boolean goOn = true;
         while (goOn) {
@@ -185,6 +200,7 @@ public class ModelViewPresenter extends Presenter<LootBoxModelController, LootBo
 
         }};
         String intro = getIntro(mainMenu);
+        intro = String.format("Главное меню:\n%s", intro);
         int choice = this.parseUserChoice(intro, true);
         return switch (choice) {
             case 1 -> this.setUp();
