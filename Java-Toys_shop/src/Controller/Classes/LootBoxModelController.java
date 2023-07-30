@@ -50,6 +50,11 @@ public class LootBoxModelController extends ModelController<LootBox> implements 
     }
 
     @Override
+    public boolean isEmpty() {
+        return this.getModel().isEmpty();
+    }
+
+    @Override
     public ToysList<Toy> put(String toysName, int numberOf, int lootingProbability) {
         return super.getModel().put(toysName, numberOf, lootingProbability);
     }

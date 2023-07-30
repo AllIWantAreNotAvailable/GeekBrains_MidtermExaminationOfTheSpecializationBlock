@@ -33,8 +33,8 @@ public class LootBoxView extends View implements LootBoxViewInterface {
 
     @Override
     public String scanInput(String introduction, boolean showInstruction) {
-        String instruction = "(Впишите номер команды и нажмите ввод (клавиша Enter) для выбора)";
-        this.showMessage(String.format("%s\n%s\n>>> ", introduction, showInstruction ? instruction : ""));
+        String instruction = "\n(Впишите номер команды и нажмите ввод (клавиша Enter) для выбора)";
+        this.showMessage(String.format("%s%s\n>>> ", introduction, showInstruction ? instruction : ""));
         return this.getScanner().nextLine();
     }
 

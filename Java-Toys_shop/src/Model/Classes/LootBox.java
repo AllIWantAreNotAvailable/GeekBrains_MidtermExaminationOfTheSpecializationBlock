@@ -65,7 +65,8 @@ public class LootBox extends Model implements LootBoxInterface {
         }
     }
 
-    private boolean isEmpty() {
+    @Override
+    public boolean isEmpty() {
         this.cleanEmpty();
         return this.getLootMap().isEmpty();
     }

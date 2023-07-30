@@ -21,6 +21,8 @@ public interface LootBoxInterface extends ModelInterface {
 
     void setLootingProbability(Map<UUID, Integer> lootingProbability);
 
+    boolean isEmpty();
+
     ToysList<Toy> put(String toysName, int numberOf, int lootingProbability);
 
     Map<UUID, String> showLootingProbabilities() throws Exception;
